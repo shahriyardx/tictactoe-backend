@@ -1,4 +1,5 @@
 const express = require("express");
+const schedule = require("node-schedule");
 const cors = require("cors");
 const http = require("http");
 const app = express();
@@ -35,6 +36,7 @@ const createGame = (socket, data) => {
     board: { ...blank_board },
     turn: socket.id,
     moves: 0,
+    last_move: new Date(),
   };
   const game = games[data.game_id];
   game.marks[socket.id] = "x";
@@ -141,6 +143,7 @@ io.on("connection", (socket) => {
     const new_player = game.players.filter((player) => player !== player_id)[0];
     game.turn = new_player;
     game.moves += 1;
+    game.last_move = new Date();
 
     io.emit("board_update", {
       game_id: game.id,
@@ -164,6 +167,18 @@ io.on("connection", (socket) => {
 
 app.get("/", (req, res) => {
   res.json(games);
+});
+
+schedule.scheduleJob("* * * * *", () => {
+  const now = new Date();
+  for (game_id in games) {
+    const game = games[game_id];
+    const delta = now - game.last_move;
+    if (delta > 30000) {
+      delete games[game_id];
+      emitGames(io);
+    }
+  }
 });
 
 const PORT = process.env.PORT || 5000;
