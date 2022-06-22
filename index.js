@@ -11,7 +11,10 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://ttt.shahriyar.dev",
+    origin:
+      process.env.NODE_ENV == "production"
+        ? "https://ttt.shahriyar.dev"
+        : "http://localhost:3000",
   },
 });
 
