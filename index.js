@@ -163,6 +163,7 @@ schedule.scheduleJob("* * * * *", () => {
     const delta = now - game.last_move;
     if (delta > 30000) {
       delete games[game_id];
+      io.emit("abandoned", { game_id });
       emitGames(io);
     }
   }
