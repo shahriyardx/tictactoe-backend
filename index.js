@@ -77,7 +77,6 @@ const emitGames = (socket) => {
   for (game_id in games) {
     const game = games[game_id];
 
-    console.log(game.players.length);
     if (game.players.length < 2) {
       free_games.push(game.id);
     }
@@ -142,6 +141,10 @@ io.on("connection", (socket) => {
     const { game_id } = data;
     delete games[game_id];
     emitGames(io);
+  });
+
+  socket.on("message", (data) => {
+    io.emit("message", data);
   });
 
   socket.on("list", () => {
