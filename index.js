@@ -43,32 +43,16 @@ const createGame = (socket, data) => {
   return game;
 };
 
-const won = (positions, mark) => {
+const won = (p, mark) => {
   if (
-    (positions["one"] == mark &&
-      positions["two"] == mark &&
-      positions["three"] == mark) ||
-    (positions["four"] == mark &&
-      positions["five"] == mark &&
-      positions["six"] == mark) ||
-    (positions["seven"] == mark &&
-      positions["eight"] == mark &&
-      positions["nine"] == mark) ||
-    (positions["one"] == mark &&
-      positions["four"] == mark &&
-      positions["seven"] == mark) ||
-    (positions["two"] == mark &&
-      positions["five"] == mark &&
-      positions["eight"] == mark) ||
-    (positions["three"] == mark &&
-      positions["six"] == mark &&
-      positions["nine"] == mark) ||
-    (positions["one"] == mark &&
-      positions["five"] == mark &&
-      positions["nine"] == mark) ||
-    (positions["three"] == mark &&
-      positions["five"] == mark &&
-      positions["seven"] == mark)
+    (p["one"] == mark && p["two"] == mark && p["three"] == mark) ||
+    (p["four"] == mark && p["five"] == mark && p["six"] == mark) ||
+    (p["seven"] == mark && p["eight"] == mark && p["nine"] == mark) ||
+    (p["one"] == mark && p["four"] == mark && p["seven"] == mark) ||
+    (p["two"] == mark && p["five"] == mark && p["eight"] == mark) ||
+    (p["three"] == mark && p["six"] == mark && p["nine"] == mark) ||
+    (p["one"] == mark && p["five"] == mark && p["nine"] == mark) ||
+    (p["three"] == mark && p["five"] == mark && p["seven"] == mark)
   ) {
     return true;
   } else {
