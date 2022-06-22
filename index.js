@@ -86,6 +86,22 @@ const detectWin = (game) => {
   });
 };
 
+const emitGames = (socket) => {
+  const free_games = [];
+  for (game_id in games) {
+    const game = games[game_id];
+
+    console.log(game.players.length);
+    if (game.players.length < 2) {
+      free_games.push(game.id);
+    }
+  }
+
+  socket.emit("games", {
+    games: free_games,
+  });
+};
+
 io.on("connection", (socket) => {
   socket.on("join", (data) => {
     let game;
@@ -108,6 +124,7 @@ io.on("connection", (socket) => {
         game_id: game.id,
       });
     }
+    emitGames(io);
   });
 
   socket.on("move", (data) => {
@@ -137,6 +154,11 @@ io.on("connection", (socket) => {
   socket.on("destroy", (data) => {
     const { game_id } = data;
     delete games[game_id];
+    emitGames(io);
+  });
+
+  socket.on("list", () => {
+    emitGames(socket);
   });
 });
 
